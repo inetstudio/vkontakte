@@ -1,0 +1,22 @@
+{
+    "name": "inetstudio/vkontakte",
+    "description": "Package for vkontakte integration",
+    "homepage": "https://github.com/inetstudio/vkontakte",
+    "license": "MIT",
+    "require": {
+        "guzzlehttp/guzzle": "^6.2",
+        "emojione/emojione": "^2.2",
+        "spatie/laravel-medialibrary": "^5.0.0"
+    },
+    "authors": [
+        {
+            "name": "Konstantin Bukin",
+            "email": "bukin@inetstudio.ru"
+        }
+    ],
+    "autoload": {
+      "psr-4": {
+        "InetStudio\\Vkontakte\\": "src/"
+      }
+    }
+}
