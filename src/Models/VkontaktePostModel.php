@@ -2,7 +2,6 @@
 
 namespace InetStudio\Vkontakte\Models;
 
-use Spatie\Image\Manipulations;
 use Emojione\Emojione as Emoji;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -94,6 +93,16 @@ class VkontaktePostModel extends Model implements HasMediaConversions
     public function getPostURLAttribute()
     {
         return 'https://vk.com/id'.$this->from_id.'?w=wall'.$this->post_id;
+    }
+
+    /**
+     * Получаем тип поста вконтакте.
+     *
+     * @return string
+     */
+    public function getTypeAttribute()
+    {
+        return $this->post_type;
     }
 
     /**
