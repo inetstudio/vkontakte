@@ -101,20 +101,22 @@ class VkontaktePost
      */
     private function getFilteredPosts($posts, $startTime, $endTime, $filter, $types)
     {
+        $filteredPosts = [];
+
         $filteredPosts['posts'] = [];
         $filteredPosts['stop'] = false;
 
         foreach ($posts as $post) {
             if (isset($post['id'])) {
-                if (in_array($post['from_id'].'_'.$post['id'], $filter) or ! $this->checkAttacmentsTypes($post, $types)) {
+                if (in_array($post['from_id'].'_'.$post['id'], $filter) || ! $this->checkAttacmentsTypes($post, $types)) {
                     continue;
                 }
 
-                if ($endTime and $post['date'] > $endTime) {
+                if ($endTime && $post['date'] > $endTime) {
                     continue;
                 }
 
-                if ($startTime and $post['date'] < $startTime) {
+                if ($startTime && $post['date'] < $startTime) {
                     $filteredPosts['stop'] = true;
                     break;
                 } else {
