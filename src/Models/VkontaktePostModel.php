@@ -10,8 +10,50 @@ use Spatie\MediaLibrary\HasMedia\Interfaces\HasMediaConversions;
 
 /**
  * Модель поста вконтакте.
- *
+ * 
  * Class VkontaktePostModel
+ *
+ * @property int $id
+ * @property string $post_id
+ * @property string $from_id
+ * @property string $owner_id
+ * @property string $post_source
+ * @property string $post_type
+ * @property string $text
+ * @property \Illuminate\Database\Eloquent\Collection|\InetStudio\Vkontakte\Models\VkontakteCommentModel[] $comments
+ * @property int $likes
+ * @property int $reposts
+ * @property int $views
+ * @property \Carbon\Carbon|null $date
+ * @property \Carbon\Carbon|null $created_at
+ * @property \Carbon\Carbon|null $updated_at
+ * @property \Carbon\Carbon|null $deleted_at
+ * @property-read mixed $caption
+ * @property-read string $post_u_r_l
+ * @property-read string $type
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\MediaLibrary\Media[] $media
+ * @property-read \InetStudio\Vkontakte\Models\VkontakteUserModel $user
+ * @method static bool|null forceDelete()
+ * @method static \Illuminate\Database\Query\Builder|\InetStudio\Vkontakte\Models\VkontaktePostModel onlyTrashed()
+ * @method static bool|null restore()
+ * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Vkontakte\Models\VkontaktePostModel whereComments($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Vkontakte\Models\VkontaktePostModel whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Vkontakte\Models\VkontaktePostModel whereDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Vkontakte\Models\VkontaktePostModel whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Vkontakte\Models\VkontaktePostModel whereFromId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Vkontakte\Models\VkontaktePostModel whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Vkontakte\Models\VkontaktePostModel whereLikes($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Vkontakte\Models\VkontaktePostModel whereOwnerId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Vkontakte\Models\VkontaktePostModel wherePostId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Vkontakte\Models\VkontaktePostModel wherePostSource($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Vkontakte\Models\VkontaktePostModel wherePostType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Vkontakte\Models\VkontaktePostModel whereReposts($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Vkontakte\Models\VkontaktePostModel whereText($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Vkontakte\Models\VkontaktePostModel whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Vkontakte\Models\VkontaktePostModel whereViews($value)
+ * @method static \Illuminate\Database\Query\Builder|\InetStudio\Vkontakte\Models\VkontaktePostModel withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|\InetStudio\Vkontakte\Models\VkontaktePostModel withoutTrashed()
+ * @mixin \Eloquent
  */
 class VkontaktePostModel extends Model implements HasMediaConversions
 {
@@ -107,6 +149,8 @@ class VkontaktePostModel extends Model implements HasMediaConversions
 
     /**
      * Получаем текст поста.
+     *
+     * @return string
      */
     public function getCaptionAttribute()
     {

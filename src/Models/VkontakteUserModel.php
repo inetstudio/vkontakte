@@ -10,8 +10,61 @@ use Spatie\MediaLibrary\HasMedia\Interfaces\HasMediaConversions;
 
 /**
  * Модель пользователя вконтакте.
- *
+ * 
  * Class VkontakteUserModel
+ *
+ * @property int $id
+ * @property string $user_id
+ * @property string $first_name
+ * @property string $last_name
+ * @property string $nickname
+ * @property string $screen_name
+ * @property int $has_photo
+ * @property string $photo_id
+ * @property string $photo_50
+ * @property string $photo_100
+ * @property string $photo_200
+ * @property string $photo_200_orig
+ * @property string $photo_400_orig
+ * @property string $photo_max
+ * @property string $photo_max_orig
+ * @property int $followers_count
+ * @property int $common_count
+ * @property \Carbon\Carbon|null $created_at
+ * @property \Carbon\Carbon|null $updated_at
+ * @property \Carbon\Carbon|null $deleted_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\InetStudio\Vkontakte\Models\VkontakteCommentModel[] $comments
+ * @property-read mixed $user_full_name
+ * @property-read string $user_nickname
+ * @property-read string $user_u_r_l
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\MediaLibrary\Media[] $media
+ * @property-read \Illuminate\Database\Eloquent\Collection|\InetStudio\Vkontakte\Models\VkontaktePostModel[] $posts
+ * @method static bool|null forceDelete()
+ * @method static \Illuminate\Database\Query\Builder|\InetStudio\Vkontakte\Models\VkontakteUserModel onlyTrashed()
+ * @method static bool|null restore()
+ * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Vkontakte\Models\VkontakteUserModel whereCommonCount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Vkontakte\Models\VkontakteUserModel whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Vkontakte\Models\VkontakteUserModel whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Vkontakte\Models\VkontakteUserModel whereFirstName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Vkontakte\Models\VkontakteUserModel whereFollowersCount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Vkontakte\Models\VkontakteUserModel whereHasPhoto($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Vkontakte\Models\VkontakteUserModel whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Vkontakte\Models\VkontakteUserModel whereLastName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Vkontakte\Models\VkontakteUserModel whereNickname($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Vkontakte\Models\VkontakteUserModel wherePhoto100($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Vkontakte\Models\VkontakteUserModel wherePhoto200($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Vkontakte\Models\VkontakteUserModel wherePhoto200Orig($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Vkontakte\Models\VkontakteUserModel wherePhoto400Orig($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Vkontakte\Models\VkontakteUserModel wherePhoto50($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Vkontakte\Models\VkontakteUserModel wherePhotoId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Vkontakte\Models\VkontakteUserModel wherePhotoMax($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Vkontakte\Models\VkontakteUserModel wherePhotoMaxOrig($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Vkontakte\Models\VkontakteUserModel whereScreenName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Vkontakte\Models\VkontakteUserModel whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Vkontakte\Models\VkontakteUserModel whereUserId($value)
+ * @method static \Illuminate\Database\Query\Builder|\InetStudio\Vkontakte\Models\VkontakteUserModel withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|\InetStudio\Vkontakte\Models\VkontakteUserModel withoutTrashed()
+ * @mixin \Eloquent
  */
 class VkontakteUserModel extends Model implements HasMediaConversions
 {
