@@ -6,14 +6,14 @@ use Emojione\Emojione as Emoji;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
-use Spatie\MediaLibrary\HasMedia\Interfaces\HasMedia;
+use Spatie\MediaLibrary\HasMedia\Interfaces\HasMediaConversions;
 
 /**
  * Модель пользователя вконтакте.
  *
  * Class VkontakteUserModel
  */
-class VkontakteUserModel extends Model implements HasMedia
+class VkontakteUserModel extends Model implements HasMediaConversions
 {
     use SoftDeletes;
     use HasMediaTrait;
@@ -109,5 +109,22 @@ class VkontakteUserModel extends Model implements HasMedia
     public function getUserFullNameAttribute()
     {
         return Emoji::shortnameToUnicode(trim($this->first_name.' '.$this->last_name));
+    }
+
+    /**
+     * Создаем превью при сохранении изображений.
+     */
+    public function registerMediaConversions()
+    {
+        $quality = (config('vkontakte.images.quality')) ? config('vkontakte.images.quality') : 75;
+
+        if (config('vkontakte.images.sizes.user')) {
+            foreach (config('vkontakte.images.sizes.user') as $name => $size) {
+                $this->addMediaConversion($name.'_thumb')
+                    ->crop('crop-center', $size['width'], $size['height'])
+                    ->quality($quality)
+                    ->performOnCollections('images');
+            }
+        }
     }
 }

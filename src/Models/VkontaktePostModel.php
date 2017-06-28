@@ -120,21 +120,13 @@ class VkontaktePostModel extends Model implements HasMediaConversions
     {
         $quality = (config('vkontakte.images.quality')) ? config('vkontakte.images.quality') : 75;
 
-        $this->addMediaConversion('edit_thumb')
-            ->crop('crop-center', 96, 96)
-            ->quality($quality)
-            ->performOnCollections('images');
-
-        $this->addMediaConversion('index_thumb')
-            ->crop('crop-center', 320, 320)
-            ->quality($quality)
-            ->performOnCollections('images');
-
-        foreach (config('vkontakte.images.sizes') as $size) {
-            $this->addMediaConversion($size['width'].'x'.$size['height'].'_thumb')
-                ->crop('crop-center', $size['width'], $size['height'])
-                ->quality($quality)
-                ->performOnCollections('images');
+        if (config('vkontakte.images.sizes.post')) {
+            foreach (config('vkontakte.images.sizes.post') as $name => $size) {
+                $this->addMediaConversion($name.'_thumb')
+                    ->crop('crop-center', $size['width'], $size['height'])
+                    ->quality($quality)
+                    ->performOnCollections('images');
+            }
         }
     }
 }
