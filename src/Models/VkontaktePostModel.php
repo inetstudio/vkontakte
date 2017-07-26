@@ -5,13 +5,12 @@ namespace InetStudio\Vkontakte\Models;
 use Emojione\Emojione as Emoji;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Nicolaslopezj\Searchable\SearchableTrait;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 use Spatie\MediaLibrary\HasMedia\Interfaces\HasMediaConversions;
 
 /**
  * Модель поста вконтакте.
- * 
- * Class VkontaktePostModel
  *
  * @property int $id
  * @property string $post_id
@@ -29,7 +28,8 @@ use Spatie\MediaLibrary\HasMedia\Interfaces\HasMediaConversions;
  * @property \Carbon\Carbon|null $updated_at
  * @property \Carbon\Carbon|null $deleted_at
  * @property-read mixed $caption
- * @property-read string $post_u_r_l
+ * @property-read string $post_url
+ * @property-read string $social_name
  * @property-read string $type
  * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\MediaLibrary\Media[] $media
  * @property-read \InetStudio\Vkontakte\Models\VkontakteUserModel $user
@@ -59,6 +59,7 @@ class VkontaktePostModel extends Model implements HasMediaConversions
 {
     use SoftDeletes;
     use HasMediaTrait;
+    use SearchableTrait;
 
     /**
      * Имя социальной сети.
@@ -155,6 +156,16 @@ class VkontaktePostModel extends Model implements HasMediaConversions
     public function getCaptionAttribute()
     {
         return Emoji::shortnameToUnicode($this->text);
+    }
+
+    /**
+     * Получаем имя социальной сети.
+     *
+     * @return string
+     */
+    public function getSocialNameAttribute()
+    {
+        return $this::NETWORK;
     }
 
     /**

@@ -68,13 +68,16 @@ class VkontaktePost
         $startTime = ($periodStart) ? strtotime($periodStart) : null;
         $endTime = ($periodEnd) ? strtotime($periodEnd) : null;
 
-        while ($haveData) {
-            $result = $this->sendRequest('newsfeed.search', ['q' => $tag, 'count' => 200, 'offset' => $offset]);
+        $searchTag = (is_array($tag)) ? array_values($tag)[0] : $tag;
+        $searchTag = $this->prepareTag($searchTag);
 
+        while ($haveData) {
+            $result = $this->sendRequest('newsfeed.search', ['q' => $searchTag, 'count' => 200, 'offset' => $offset]);
             sleep(1);
+            echo "$offset\r\n";
 
             if (isset($result['response'])) {
-                $all = $this->getFilteredPosts($result['response'], $startTime, $endTime, $filter, $types);
+                $all = $this->getFilteredPosts($result['response'], $tag, $startTime, $endTime, $filter, $types);
 
                 $postsArr = array_merge($postsArr, $all['posts']);
             }
@@ -99,15 +102,25 @@ class VkontaktePost
      * @param $types
      * @return mixed
      */
-    private function getFilteredPosts($posts, $startTime, $endTime, $filter, $types)
+    private function getFilteredPosts($posts, $tag, $startTime, $endTime, $filter, $types)
     {
         $filteredPosts = [];
 
         $filteredPosts['posts'] = [];
         $filteredPosts['stop'] = false;
 
+        $tag = $this->prepareTag($tag);
+
         foreach ($posts as $post) {
             if (isset($post['id'])) {
+                if (is_array($tag)) {
+                    $text = (isset($post['text'])) ? Emoji::toShort($post['text']) : '';
+                    preg_match_all("/(#[а-яА-Яa-zA-Z0-9]+)/u", $text, $postTags);
+                    $postTags = array_map(function($value) { return mb_strtolower($value); }, $postTags[0]);
+
+                    if (count(array_intersect($tag, $postTags)) != count($tag)) continue;
+                }
+
                 if (in_array($post['from_id'].'_'.$post['id'], $filter) || ! $this->checkAttacmentsTypes($post, $types)) {
                     continue;
                 }
@@ -167,5 +180,20 @@ class VkontaktePost
         $media = json_decode($response->getBody()->getContents(), true);
 
         return $media;
+    }
+
+    /**
+     * Приводим полученные теги к нужному виду.
+     *
+     * @param $tag
+     * @return array|string
+     */
+    private function prepareTag($tag)
+    {
+        if (is_array($tag)) {
+            return array_map(function($value) { return '#'.trim($value, '#'); }, $tag);
+        } else {
+            return '#'.trim($tag, '#');
+        }
     }
 }
