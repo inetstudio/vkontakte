@@ -74,7 +74,6 @@ class VkontaktePost
         while ($haveData) {
             $result = $this->sendRequest('newsfeed.search', ['q' => $searchTag, 'count' => 200, 'offset' => $offset]);
             sleep(1);
-            echo "$offset\r\n";
 
             if (isset($result['response'])) {
                 $all = $this->getFilteredPosts($result['response'], $tag, $startTime, $endTime, $filter, $types);
