@@ -74,7 +74,7 @@ class VkontakteCommentModel extends Model
     /**
      * Обратное отношение "один ко многим" с моделью пользователя вконтакте.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function user()
     {
@@ -84,7 +84,7 @@ class VkontakteCommentModel extends Model
     /**
      * Обратное отношение "один ко многим" с моделью поста вконтакте.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function post()
     {

@@ -12,6 +12,8 @@ use Spatie\MediaLibrary\HasMedia\Interfaces\HasMediaConversions;
 /**
  * Модель поста вконтакте.
  *
+ * Class VkontaktePostModel
+ *
  * @property int $id
  * @property string $post_id
  * @property string $from_id
@@ -111,7 +113,7 @@ class VkontaktePostModel extends Model implements HasMediaConversions
     /**
      * Обратное отношение "один ко многим" с моделью пользователя вконтакте.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function user()
     {
