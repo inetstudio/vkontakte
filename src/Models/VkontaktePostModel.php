@@ -5,7 +5,6 @@ namespace InetStudio\Vkontakte\Models;
 use Emojione\Emojione as Emoji;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Nicolaslopezj\Searchable\SearchableTrait;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 use Spatie\MediaLibrary\HasMedia\Interfaces\HasMediaConversions;
 
@@ -61,7 +60,6 @@ class VkontaktePostModel extends Model implements HasMediaConversions
 {
     use SoftDeletes;
     use HasMediaTrait;
-    use SearchableTrait;
 
     /**
      * Имя социальной сети.
