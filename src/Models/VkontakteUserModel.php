@@ -10,7 +10,7 @@ use Spatie\MediaLibrary\HasMedia\Interfaces\HasMediaConversions;
 
 /**
  * Модель пользователя вконтакте.
- * 
+ *
  * Class VkontakteUserModel
  *
  * @property int $id
