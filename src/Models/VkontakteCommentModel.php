@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * Модель комментария вконтакте.
- * 
+ *
  * Class VkontakteCommentModel
  *
  * @property int $id

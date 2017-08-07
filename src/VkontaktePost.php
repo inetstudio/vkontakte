@@ -114,10 +114,14 @@ class VkontaktePost
             if (isset($post['id'])) {
                 if (is_array($tag)) {
                     $text = (isset($post['text'])) ? Emoji::toShort($post['text']) : '';
-                    preg_match_all("/(#[а-яА-Яa-zA-Z0-9]+)/u", $text, $postTags);
-                    $postTags = array_map(function($value) { return mb_strtolower($value); }, $postTags[0]);
+                    preg_match_all('/(#[а-яА-Яa-zA-Z0-9]+)/u', $text, $postTags);
+                    $postTags = array_map(function ($value) {
+                        return mb_strtolower($value);
+                    }, $postTags[0]);
 
-                    if (count(array_intersect($tag, $postTags)) != count($tag)) continue;
+                    if (count(array_intersect($tag, $postTags)) != count($tag)) {
+                        continue;
+                    }
                 }
 
                 if (in_array($post['from_id'].'_'.$post['id'], $filter) || ! $this->checkAttacmentsTypes($post, $types)) {
@@ -190,7 +194,9 @@ class VkontaktePost
     private function prepareTag($tag)
     {
         if (is_array($tag)) {
-            return array_map(function($value) { return '#'.trim($value, '#'); }, $tag);
+            return array_map(function ($value) {
+                return '#'.trim($value, '#');
+            }, $tag);
         } else {
             return '#'.trim($tag, '#');
         }
