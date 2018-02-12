@@ -1,33 +1,31 @@
 <?php
 
-namespace InetStudio\Vkontakte;
+namespace InetStudio\Vkontakte\Services\Back;
 
 use GuzzleHttp\Client;
 use Emojione\Emojione as Emoji;
 use InetStudio\Vkontakte\Models\VkontaktePostModel;
+use InetStudio\Vkontakte\Contracts\Services\Back\VkontaktePostsServiceContract;
 
-class VkontaktePost
+/**
+ * Class VkontaktePostsService
+ * @package InetStudio\Vkontakte\Services\Back
+ */
+class VkontaktePostsService implements VkontaktePostsServiceContract
 {
     /**
      * Создание поста по его идентификатору.
      *
      * @param string $id
-     * @return null
+     *
+     * @return VkontaktePostModel|null
      */
-    public function createPost($id = '')
+    public function createPost($id = ''): ? VkontaktePostModel
     {
-        if (! $id) {
-            return;
-        }
+        $post = $this->getPostByID($id);
 
-        $result = $this->sendRequest('wall.getById', ['posts' => $id]);
-
-        sleep(1);
-
-        if (isset($result['response'][0])) {
-            $post = $result['response'][0];
-        } else {
-            return;
+        if (! $post) {
+            return null;
         }
 
         $vkontaktePost = VkontaktePostModel::updateOrCreate([
@@ -73,7 +71,7 @@ class VkontaktePost
 
         while ($haveData) {
             $result = $this->sendRequest('newsfeed.search', ['q' => $searchTag, 'count' => 200, 'offset' => $offset]);
-            sleep(1);
+            sleep(5);
 
             if (isset($result['response'])) {
                 $all = $this->getFilteredPosts($result['response'], $tag, $startTime, $endTime, $filter, $types);
@@ -89,6 +87,31 @@ class VkontaktePost
         }
 
         return array_reverse($postsArr);
+    }
+
+    /**
+     * Получаем пост из Vkontakte.
+     *
+     * @param string $id
+     *
+     * @return array|null
+     */
+    public function getPostByID(string $id = ''): ?array
+    {
+        if (! $id) {
+            return null;
+        }
+
+        $result = $this->sendRequest('wall.getById', ['posts' => $id]);
+        sleep(5);
+
+        if (isset($result['response'][0])) {
+            $post = $result['response'][0];
+        } else {
+            return null;
+        }
+
+        return $post;
     }
 
     /**

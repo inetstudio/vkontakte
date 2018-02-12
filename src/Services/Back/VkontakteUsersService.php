@@ -1,12 +1,17 @@
 <?php
 
-namespace InetStudio\Vkontakte;
+namespace InetStudio\Vkontakte\Services\Back;
 
 use GuzzleHttp\Client;
 use Emojione\Emojione as Emoji;
 use InetStudio\Vkontakte\Models\VkontakteUserModel;
+use InetStudio\Vkontakte\Contracts\Services\Back\VkontakteUsersServiceContract;
 
-class VkontakteUser
+/**
+ * Class VkontakteUsersService
+ * @package InetStudio\Vkontakte\Services\Back
+ */
+class VkontakteUsersService implements VkontakteUsersServiceContract
 {
     /**
      * Создание пользователя по его идентификатору.

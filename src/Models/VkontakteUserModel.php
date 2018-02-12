@@ -2,10 +2,12 @@
 
 namespace InetStudio\Vkontakte\Models;
 
+use Spatie\MediaLibrary\Media;
 use Emojione\Emojione as Emoji;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
+use Spatie\Image\Exceptions\InvalidManipulation;
 use Spatie\MediaLibrary\HasMedia\Interfaces\HasMediaConversions;
 
 /**
@@ -165,18 +167,44 @@ class VkontakteUserModel extends Model implements HasMediaConversions
     }
 
     /**
-     * Создаем превью при сохранении изображений.
+     * Регистрируем преобразования изображений.
+     *
+     * @param Media|null $media
+     *
+     * @throws InvalidManipulation
      */
-    public function registerMediaConversions()
+    public function registerMediaConversions(Media $media = null)
     {
         $quality = (config('vkontakte.images.quality')) ? config('vkontakte.images.quality') : 75;
 
-        if (config('vkontakte.images.sizes.user')) {
-            foreach (config('vkontakte.images.sizes.user') as $name => $size) {
-                $this->addMediaConversion($name.'_thumb')
-                    ->crop('crop-center', $size['width'], $size['height'])
-                    ->quality($quality)
-                    ->performOnCollections('images');
+        if (config('vkontakte.images.users.conversions')) {
+            foreach (config('vkontakte.images.users.conversions') as $collection => $image) {
+                foreach ($image as $crop) {
+                    foreach ($crop as $conversion) {
+                        $imageConversion = $this->addMediaConversion($conversion['name'])->nonQueued();
+
+                        if (isset($conversion['size']['width'])) {
+                            $imageConversion->width($conversion['size']['width']);
+                        }
+
+                        if (isset($conversion['size']['height'])) {
+                            $imageConversion->height($conversion['size']['height']);
+                        }
+
+                        if (isset($conversion['fit']['width']) && isset($conversion['fit']['height'])) {
+                            $imageConversion->fit('max', $conversion['fit']['width'], $conversion['fit']['height']);
+                        }
+
+                        if (isset($conversion['quality'])) {
+                            $imageConversion->quality($conversion['quality']);
+                            $imageConversion->optimize();
+                        } else {
+                            $imageConversion->quality($quality);
+                        }
+
+                        $imageConversion->performOnCollections($collection);
+                    }
+                }
             }
         }
     }
