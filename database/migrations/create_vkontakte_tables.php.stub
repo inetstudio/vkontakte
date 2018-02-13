@@ -62,7 +62,7 @@ class CreateVkontakteTables extends Migration
             $table->softDeletes();
         });
 
-         Schema::create('vkontakte_attachments_link', function (Blueprint $table) {
+         Schema::create('vkontakte_attachments_links', function (Blueprint $table) {
             $table->increments('id');
             $table->string('post_id')->index();
 
