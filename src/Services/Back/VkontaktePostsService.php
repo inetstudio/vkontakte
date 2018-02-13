@@ -5,6 +5,9 @@ namespace InetStudio\Vkontakte\Services\Back;
 use GuzzleHttp\Client;
 use Emojione\Emojione as Emoji;
 use InetStudio\Vkontakte\Models\VkontaktePostModel;
+use InetStudio\Vkontakte\Models\Attachments\LinkModel;
+use InetStudio\Vkontakte\Models\Attachments\PhotoModel;
+use InetStudio\Vkontakte\Models\Attachments\VideoModel;
 use InetStudio\Vkontakte\Contracts\Services\Back\VkontaktePostsServiceContract;
 
 /**
@@ -42,6 +45,58 @@ class VkontaktePostsService implements VkontaktePostsServiceContract
             'views' => (isset($post['views']['count'])) ? $post['views']['count'] : 0,
             'date' => $post['date'],
         ]);
+
+        if (isset($post['attachments'])) {
+            foreach ($post['attachments'] as $attachment) {
+                switch ($attachment['type']) {
+                    case 'link':
+                        LinkModel::updateOrCreate([
+                            'post_id' => $vkontaktePost->id,
+                            'url' => $attachment['link']['title'],
+                        ], [
+                            'title' => (isset($attachment['link']['title'])) ? $attachment['link']['title'] : '',
+                            'description' => (isset($attachment['link']['description'])) ? $attachment['link']['description'] : '',
+                            'target' => (isset($attachment['link']['target'])) ? $attachment['link']['target'] : '',
+                        ]);
+                        break;
+                    case 'photo':
+                        PhotoModel::updateOrCreate([
+                            'post_id' => $vkontaktePost->id,
+                            'pid' => (isset($attachment['photo']['pid'])) ? $attachment['photo']['pid'] : '',
+                        ], [
+                            'aid' => (isset($attachment['photo']['aid'])) ? $attachment['photo']['aid'] : '',
+                            'owner_id' => (isset($attachment['photo']['owner_id'])) ? $attachment['photo']['owner_id'] : '',
+                            'src' => (isset($attachment['photo']['src'])) ? $attachment['photo']['src'] : '',
+                            'src_big' => (isset($attachment['photo']['src_big'])) ? $attachment['photo']['src_big'] : '',
+                            'src_small' => (isset($attachment['photo']['src_small'])) ? $attachment['photo']['src_small'] : '',
+                            'src_xbig' => (isset($attachment['photo']['src_xbig'])) ? $attachment['photo']['src_xbig'] : '',
+                            'src_xxbig' => (isset($attachment['photo']['src_xxbig'])) ? $attachment['photo']['src_xxbig'] : '',
+                            'src_xxxbig' => (isset($attachment['photo']['src_xxxbig'])) ? $attachment['photo']['src_xxxbig'] : '',
+                            'width' => (isset($attachment['photo']['width'])) ? $attachment['photo']['width'] : 0,
+                            'height' => (isset($attachment['photo']['height'])) ? $attachment['photo']['height'] : 0,
+                            'text' => (isset($attachment['photo']['text'])) ? Emoji::toShort($attachment['photo']['text']) : '',
+                            'date' => $attachment['photo']['created'],
+                        ]);
+                        break;
+                    case 'video':
+                        VideoModel::updateOrCreate([
+                            'post_id' => $vkontaktePost->id,
+                            'vid' => (isset($attachment['video']['vid'])) ? $attachment['video']['vid'] : '',
+                        ], [
+                            'owner_id' => (isset($attachment['video']['owner_id'])) ? $attachment['video']['owner_id'] : '',
+                            'title' => (isset($attachment['video']['title'])) ? Emoji::toShort($attachment['video']['title']) : '',
+                            'duration' => (isset($attachment['video']['duration'])) ? $attachment['video']['duration'] : 0,
+                            'description' => (isset($attachment['video']['description'])) ? Emoji::toShort($attachment['video']['description']) : '',
+                            'views' => (isset($attachment['video']['views'])) ? $attachment['video']['views'] : 0,
+                            'image' => (isset($attachment['video']['image'])) ? $attachment['video']['image'] : '',
+                            'image_big' => (isset($attachment['video']['image_big'])) ? $attachment['video']['image_big'] : '',
+                            'image_small' => (isset($attachment['video']['image_small'])) ? $attachment['video']['image_small'] : '',
+                            'date' => $attachment['video']['date'],
+                        ]);
+                        break;
+                }
+            }
+        }
 
         return $vkontaktePost;
     }
@@ -135,18 +190,6 @@ class VkontaktePostsService implements VkontaktePostsServiceContract
 
         foreach ($posts as $post) {
             if (isset($post['id'])) {
-                if (is_array($tag)) {
-                    $text = (isset($post['text'])) ? Emoji::toShort($post['text']) : '';
-                    preg_match_all('/(#[а-яА-Яa-zA-Z0-9]+)/u', $text, $postTags);
-                    $postTags = array_map(function ($value) {
-                        return mb_strtolower($value);
-                    }, $postTags[0]);
-
-                    if (count(array_intersect($tag, $postTags)) != count($tag)) {
-                        continue;
-                    }
-                }
-
                 if (in_array($post['from_id'].'_'.$post['id'], $filter) || ! $this->checkAttacmentsTypes($post, $types)) {
                     continue;
                 }
@@ -155,8 +198,13 @@ class VkontaktePostsService implements VkontaktePostsServiceContract
                     continue;
                 }
 
+                if (! $this->checkTextTags($post, $tag)) {
+                    continue;
+                }
+
                 if ($startTime && $post['date'] < $startTime) {
                     $filteredPosts['stop'] = true;
+
                     break;
                 } else {
                     array_push($filteredPosts['posts'], $post);
@@ -168,16 +216,68 @@ class VkontaktePostsService implements VkontaktePostsServiceContract
     }
 
     /**
+     * Проверяем наличие тегов в посте.
+     *
+     * @param $post
+     * @param $tag
+     *
+     * @return bool
+     */
+    private function checkTextTags($post, $tag): bool
+    {
+        $result = false;
+
+        if (is_array($tag)) {
+            $texts = [];
+            $texts[] = (isset($post['text'])) ? Emoji::toShort($post['text']) : '';
+
+            if (isset($post['attachments'])) {
+                foreach ($post['attachments'] as $attachment) {
+                    switch ($attachment['type']) {
+                        case 'link':
+                            $texts[] = $attachment['link']['title'];
+                            $texts[] = $attachment['link']['description'];
+                            break;
+                        case 'photo':
+                            $texts[] = $attachment['photo']['text'];
+                            break;
+                        case 'video':
+                            $texts[] = $attachment['video']['title'];
+                            $texts[] = $attachment['video']['description'];
+                            break;
+                    }
+                }
+            }
+
+            foreach ($texts as $text) {
+                preg_match_all('/(#[а-яА-Яa-zA-Z0-9]+)/u', $text, $postTags);
+                $postTags = array_map(function ($value) {
+                    return mb_strtolower($value);
+                }, $postTags[0]);
+
+                if (count(array_intersect($tag, $postTags)) == count($tag)) {
+                    $result = true;
+
+                    break;
+                }
+            }
+        }
+
+        return $result;
+    }
+
+    /**
      * Проверяем тип вложений.
      *
      * @param $post
      * @param $types
-     * @return bool|void
+     *
+     * @return bool
      */
-    private function checkAttacmentsTypes($post, $types)
+    private function checkAttacmentsTypes($post, $types): bool
     {
         if (! isset($post['attachments'])) {
-            return;
+            return false;
         }
 
         foreach ($post['attachments'] as $attachment) {
@@ -194,6 +294,7 @@ class VkontaktePostsService implements VkontaktePostsServiceContract
      *
      * @param $action
      * @param $params
+     *
      * @return mixed
      */
     private function sendRequest($action, $params)
@@ -212,16 +313,17 @@ class VkontaktePostsService implements VkontaktePostsServiceContract
      * Приводим полученные теги к нужному виду.
      *
      * @param $tag
+     *
      * @return array|string
      */
     private function prepareTag($tag)
     {
         if (is_array($tag)) {
             return array_map(function ($value) {
-                return '#'.trim($value, '#');
+                return '#'.trim(mb_strtolower($value), '#');
             }, $tag);
         } else {
-            return '#'.trim($tag, '#');
+            return '#'.trim(mb_strtolower($tag), '#');
         }
     }
 }

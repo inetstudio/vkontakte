@@ -8,6 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 use Spatie\Image\Exceptions\InvalidManipulation;
+use InetStudio\Vkontakte\Models\Attachments\LinkModel;
+use InetStudio\Vkontakte\Models\Attachments\PhotoModel;
+use InetStudio\Vkontakte\Models\Attachments\VideoModel;
 use Spatie\MediaLibrary\HasMedia\Interfaces\HasMediaConversions;
 
 /**
@@ -128,6 +131,36 @@ class VkontaktePostModel extends Model implements HasMediaConversions
     public function comments()
     {
         return $this->hasMany(VkontakteCommentModel::class);
+    }
+
+    /**
+     * Отношение "один ко многим" с моделью вложений ссылок.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function links()
+    {
+        return $this->hasMany(LinkModel::class, 'post_id', 'id');
+    }
+
+    /**
+     * Отношение "один ко многим" с моделью вложений фото.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function photos()
+    {
+        return $this->hasMany(PhotoModel::class, 'post_id', 'id');
+    }
+
+    /**
+     * Отношение "один ко многим" с моделью вложений видео.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function videos()
+    {
+        return $this->hasMany(VideoModel::class, 'post_id', 'id');
     }
 
     /**
