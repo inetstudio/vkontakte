@@ -24,7 +24,7 @@ class VideoModel extends Model
      */
     protected $fillable = [
         'post_id', 'vid', 'owner_id', 'title', 'duration', 'description', 'views',
-        'image', 'image_big', 'image_small',
+        'image', 'image_big', 'image_small', 'date',
     ];
 
     /**

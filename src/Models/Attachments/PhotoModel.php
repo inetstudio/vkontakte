@@ -24,7 +24,7 @@ class PhotoModel extends Model
      */
     protected $fillable = [
         'post_id', 'pid', 'aid', 'owner_id', 'src', 'src_big', 'src_small',
-        'src_xbig', 'src_xxbig', 'src_xxxbig', 'width', 'height', 'text',
+        'src_xbig', 'src_xxbig', 'src_xxxbig', 'width', 'height', 'text', 'date',
     ];
 
     /**

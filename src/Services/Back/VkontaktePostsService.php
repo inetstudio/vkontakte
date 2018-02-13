@@ -52,7 +52,7 @@ class VkontaktePostsService implements VkontaktePostsServiceContract
                     case 'link':
                         LinkModel::updateOrCreate([
                             'post_id' => $vkontaktePost->id,
-                            'url' => $attachment['link']['title'],
+                            'url' => $attachment['link']['url'],
                         ], [
                             'title' => (isset($attachment['link']['title'])) ? $attachment['link']['title'] : '',
                             'description' => (isset($attachment['link']['description'])) ? $attachment['link']['description'] : '',

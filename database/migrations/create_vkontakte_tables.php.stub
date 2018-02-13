@@ -89,6 +89,7 @@ class CreateVkontakteTables extends Migration
             $table->string('src_small')->default('');
             $table->string('src_xbig')->default('');
             $table->string('src_xxbig')->default('');
+            $table->string('src_xxxbig')->default('');
             $table->integer('width')->default(0);
             $table->integer('height')->default(0);
             $table->text('text')->nullable();
@@ -110,7 +111,7 @@ class CreateVkontakteTables extends Migration
             $table->integer('views')->default(0);
             $table->string('image')->default('');
             $table->string('image_big')->default('');
-            $table->integer('image_small')->default(0);
+            $table->string('image_small')->default('');
             $table->timestamp('date')->nullable();
 
             $table->timestamps();
