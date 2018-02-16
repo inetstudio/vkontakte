@@ -204,6 +204,16 @@ class VkontaktePostModel extends Model implements HasMediaConversions
     }
 
     /**
+     * Получаем дату поста.
+     *
+     * @return \Carbon\Carbon|null
+     */
+    public function getPostTimeAttribute()
+    {
+        return $this->date;
+    }
+
+    /**
      * Регистрируем преобразования изображений.
      *
      * @param Media|null $media
