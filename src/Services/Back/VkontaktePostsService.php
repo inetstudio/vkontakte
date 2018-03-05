@@ -114,7 +114,7 @@ class VkontaktePostsService implements VkontaktePostsServiceContract
     public function getPostsByTag($tag, $periodStart = '', $periodEnd = '', $filter = [], $types = [1, 2])
     {
         $haveData = true;
-        $offset = 0;
+        $startFrom = '';
 
         $postsArr = [];
 
@@ -125,7 +125,7 @@ class VkontaktePostsService implements VkontaktePostsServiceContract
         $searchTag = $this->prepareTag($searchTag);
 
         while ($haveData) {
-            $result = $this->sendRequest('newsfeed.search', ['q' => $searchTag, 'count' => 200, 'offset' => $offset]);
+            $result = $this->sendRequest('newsfeed.search', ['q' => $searchTag, 'count' => 200, 'start_from' => $startFrom]);
             sleep(5);
 
             if (isset($result['response'])) {
@@ -134,8 +134,8 @@ class VkontaktePostsService implements VkontaktePostsServiceContract
                 $postsArr = array_merge($postsArr, $all['posts']);
             }
 
-            if (count($result['response']) > 1) {
-                $offset += 200;
+            if (isset($result['response']['next_from'])) {
+                $startFrom = $result['response']['next_from'];
             } else {
                 $haveData = false;
             }
