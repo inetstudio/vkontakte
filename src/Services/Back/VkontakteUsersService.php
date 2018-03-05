@@ -37,7 +37,7 @@ class VkontakteUsersService implements VkontakteUsersServiceContract
         }
 
         $vkontakteUser = VkontakteUserModel::updateOrCreate([
-            'user_id' => $user['uid'],
+            'user_id' => $user['id'],
         ], [
             'first_name' => (isset($user['first_name'])) ? Emoji::toShort($user['first_name']) : '',
             'last_name' => (isset($user['last_name'])) ? Emoji::toShort($user['last_name']) : '',
