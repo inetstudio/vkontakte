@@ -62,20 +62,20 @@ class VkontaktePostsService implements VkontaktePostsServiceContract
                     case 'photo':
                         PhotoModel::updateOrCreate([
                             'post_id' => $vkontaktePost->id,
-                            'pid' => (isset($attachment['photo']['pid'])) ? $attachment['photo']['pid'] : '',
+                            'pid' => (isset($attachment['photo']['id'])) ? $attachment['photo']['id'] : '',
                         ], [
-                            'aid' => (isset($attachment['photo']['aid'])) ? $attachment['photo']['aid'] : '',
+                            'aid' => (isset($attachment['photo']['album_id'])) ? $attachment['photo']['album_id'] : '',
                             'owner_id' => (isset($attachment['photo']['owner_id'])) ? $attachment['photo']['owner_id'] : '',
-                            'src' => (isset($attachment['photo']['src'])) ? $attachment['photo']['src'] : '',
-                            'src_big' => (isset($attachment['photo']['src_big'])) ? $attachment['photo']['src_big'] : '',
-                            'src_small' => (isset($attachment['photo']['src_small'])) ? $attachment['photo']['src_small'] : '',
-                            'src_xbig' => (isset($attachment['photo']['src_xbig'])) ? $attachment['photo']['src_xbig'] : '',
-                            'src_xxbig' => (isset($attachment['photo']['src_xxbig'])) ? $attachment['photo']['src_xxbig'] : '',
-                            'src_xxxbig' => (isset($attachment['photo']['src_xxxbig'])) ? $attachment['photo']['src_xxxbig'] : '',
+                            'src' => (isset($attachment['photo']['photo_75'])) ? $attachment['photo']['photo_75'] : '',
+                            'src_big' => (isset($attachment['photo']['photo_130'])) ? $attachment['photo']['photo_130'] : '',
+                            'src_small' => (isset($attachment['photo']['photo_604'])) ? $attachment['photo']['photo_604'] : '',
+                            'src_xbig' => (isset($attachment['photo']['photo_807'])) ? $attachment['photo']['photo_807'] : '',
+                            'src_xxbig' => (isset($attachment['photo']['photo_1280'])) ? $attachment['photo']['photo_1280'] : '',
+                            'src_xxxbig' => (isset($attachment['photo']['photo_2560'])) ? $attachment['photo']['photo_2560'] : '',
                             'width' => (isset($attachment['photo']['width'])) ? $attachment['photo']['width'] : 0,
                             'height' => (isset($attachment['photo']['height'])) ? $attachment['photo']['height'] : 0,
                             'text' => (isset($attachment['photo']['text'])) ? Emoji::toShort($attachment['photo']['text']) : '',
-                            'date' => $attachment['photo']['created'],
+                            'date' => $attachment['photo']['date'],
                         ]);
                         break;
                     case 'video':
@@ -129,7 +129,7 @@ class VkontaktePostsService implements VkontaktePostsServiceContract
             sleep(5);
 
             if (isset($result['response'])) {
-                $all = $this->getFilteredPosts($result['response'], $tag, $startTime, $endTime, $filter, $types);
+                $all = $this->getFilteredPosts($result['response']['items'], $tag, $startTime, $endTime, $filter, $types);
 
                 $postsArr = array_merge($postsArr, $all['posts']);
             }
