@@ -3,17 +3,13 @@
 namespace InetStudio\Vkontakte\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Contracts\Support\DeferrableProvider;
 
 /**
  * Class VkontakteBindingsServiceProvider.
  */
-class VkontakteBindingsServiceProvider extends ServiceProvider
+class VkontakteBindingsServiceProvider extends ServiceProvider implements DeferrableProvider
 {
-    /**
-    * @var  bool
-    */
-    protected $defer = true;
-
     /**
     * @var  array
     */

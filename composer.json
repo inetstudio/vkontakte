@@ -7,8 +7,8 @@
         "php": ">=7.1.3",
         "ext-json": "*",
         "guzzlehttp/guzzle": "^6.3",
-        "emojione/emojione": "^4.0",
-        "vkcom/vk-php-sdk": "^5.80"
+        "emojione/emojione": "^4.5",
+        "vkcom/vk-php-sdk": "^5.92"
     },
     "authors": [
         {
