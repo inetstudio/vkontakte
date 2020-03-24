@@ -2,7 +2,7 @@
 
 namespace InetStudio\Vkontakte\Posts\Services\Back;
 
-use Spatie\MediaLibrary\Models\Media;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use InetStudio\AdminPanel\Services\Back\BaseService;
 use InetStudio\Vkontakte\Posts\Contracts\Models\PostModelContract;
 use InetStudio\Vkontakte\Posts\Contracts\Services\Back\PostsServiceContract;
