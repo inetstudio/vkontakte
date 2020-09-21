@@ -4,9 +4,9 @@
     "homepage": "https://github.com/inetstudio/vkontakte",
     "license": "MIT",
     "require": {
-        "php": "^7.2",
+        "php": "^7.3",
         "ext-json": "*",
-        "guzzlehttp/guzzle": "^6.3",
+        "guzzlehttp/guzzle": "^7.0",
         "emojione/emojione": "^4.5",
         "vkcom/vk-php-sdk": "^5.101"
     },
