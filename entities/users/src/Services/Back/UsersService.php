@@ -34,7 +34,7 @@ class UsersService extends BaseService implements UsersServiceContract
         }
 
         $data = [
-            'user_id' => $user['id'],
+            'user_id' => (($user['type'] ?? '') === 'group') ? '-'.$user['id'] : $user['id'],
             'additional_info' => $user,
         ];
 
@@ -78,10 +78,15 @@ class UsersService extends BaseService implements UsersServiceContract
                 $result = $result = $vkontakteService->request('users', 'get', [
                     'user_ids' => $post['from_id'],
                 ]);
-                sleep(1);
-
-                $post['user'] = $result[0] ?? [];
+            } else {
+                $result = $result = $vkontakteService->request('groups', 'getById', [
+                    'group_ids' => trim($post['from_id'], '-'),
+                ]);
             }
+
+            sleep(1);
+
+            $post['user'] = $result[0] ?? [];
         }
 
         return $posts;

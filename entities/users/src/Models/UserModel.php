@@ -93,6 +93,10 @@ class UserModel extends Model implements UserModelContract, HasMedia
      */
     public function getUrlAttribute()
     {
+        if (($this->additional_info['type'] ?? '') === 'group') {
+            return 'https://vk.com/club'.$this->additional_info['id'];
+        }
+
         return 'https://vk.com/id'.$this->user_id;
     }
 
@@ -113,6 +117,10 @@ class UserModel extends Model implements UserModelContract, HasMedia
      */
     public function getFullNameAttribute()
     {
+        if (($this->additional_info['type'] ?? '') === 'group') {
+            return $this->additional_info['name'];
+        }
+
         return trim(($this->additional_info['first_name'] ?? '').' '.($this->additional_info['last_name'] ?? ''));
     }
 
