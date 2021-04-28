@@ -4,7 +4,7 @@
     "homepage": "https://github.com/inetstudio/vkontakte",
     "license": "MIT",
     "require": {
-        "php": "^7.3",
+        "php": ">=7.3",
         "ext-json": "*",
         "guzzlehttp/guzzle": "^7.0",
         "emojione/emojione": "^4.5",
