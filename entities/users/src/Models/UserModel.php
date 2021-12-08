@@ -5,7 +5,7 @@ namespace InetStudio\Vkontakte\Users\Models;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\HasMedia;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use InetStudio\Uploads\Models\Traits\HasImages;
+use InetStudio\UploadsPackage\Uploads\Models\Traits\HasMedia;
 use InetStudio\AdminPanel\Models\Traits\HasJSONColumns;
 use InetStudio\Vkontakte\Users\Contracts\Models\UserModelContract;
 
@@ -14,7 +14,7 @@ use InetStudio\Vkontakte\Users\Contracts\Models\UserModelContract;
  */
 class UserModel extends Model implements UserModelContract, HasMedia
 {
-    use HasImages;
+    use HasMedia;
     use SoftDeletes;
     use HasJSONColumns;
 

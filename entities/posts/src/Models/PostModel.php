@@ -5,7 +5,7 @@ namespace InetStudio\Vkontakte\Posts\Models;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\HasMedia;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use InetStudio\Uploads\Models\Traits\HasImages;
+use InetStudio\UploadsPackage\Uploads\Models\Traits\HasMedia;
 use InetStudio\AdminPanel\Models\Traits\HasJSONColumns;
 use InetStudio\Vkontakte\Posts\Contracts\Models\PostModelContract;
 
@@ -14,7 +14,7 @@ use InetStudio\Vkontakte\Posts\Contracts\Models\PostModelContract;
  */
 class PostModel extends Model implements PostModelContract, HasMedia
 {
-    use HasImages;
+    use HasMedia;
     use SoftDeletes;
     use HasJSONColumns;
 
